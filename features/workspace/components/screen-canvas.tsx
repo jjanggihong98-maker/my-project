@@ -4,6 +4,7 @@ import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
 import { findContainmentWarnings } from "@/features/draft";
 import {
+  containsPoint,
   enter,
   exit,
   flatten,
@@ -12,7 +13,6 @@ import {
   type Bounds,
   type NodeKind,
   type Point,
-  type SpecNode,
 } from "@/features/spec-model";
 import { cn } from "@/lib/utils";
 
@@ -98,7 +98,7 @@ export function ScreenCanvas({
       setDrawing([p[0], p[1], 0, 0]);
     } else if (handle && selected) {
       drag.current = { type: "resize", corner: handle, origin: selected.bounds };
-    } else if (selected && selected.id !== root.id && isInside(selected, p)) {
+    } else if (selected && selected.id !== root.id && containsPoint(selected.bounds, p)) {
       drag.current = { type: "move", last: p, start: p, moved: false };
     } else {
       drag.current = { type: "click", start: p };
@@ -247,9 +247,4 @@ export function ScreenCanvas({
       </div>
     </div>
   );
-}
-
-function isInside(node: SpecNode, p: Point): boolean {
-  const [x, y, w, h] = node.bounds;
-  return p[0] >= x && p[0] <= x + w && p[1] >= y && p[1] <= y + h;
 }
