@@ -1,0 +1,95 @@
+{
+  "id": "screen",
+  "type": "frame",
+  "bounds": [0.0000, 0.0000, 1.0000, 1.0000],
+  "children": [
+    {
+      "id": "notification_card",
+      "type": "frame",
+      "bounds": [0.0275, 0.0649, 0.9201, 0.8919],
+      "children": [
+        {
+          "id": "header_row",
+          "type": "frame",
+          "bounds": [0.0579, 0.1243, 0.8595, 0.1135],
+          "children": [
+            { "id": "app_icon", "type": "icon", "bounds": [0.0606, 0.1297, 0.0551, 0.1081] },
+            { "id": "app_name", "type": "text", "bounds": [0.1405, 0.1622, 0.1377, 0.0541], "text": "App Name" },
+            { "id": "time_text", "type": "text", "bounds": [0.8017, 0.1297, 0.1129, 0.0378], "text": "HH:MM AM" },
+            { "id": "collapse_icon", "type": "icon", "bounds": [0.8788, 0.1946, 0.0303, 0.0324] }
+          ]
+        },
+        {
+          "id": "content_row",
+          "type": "frame",
+          "bounds": [0.0579, 0.2865, 0.8623, 0.2378],
+          "children": [
+            {
+              "id": "content_text_group",
+              "type": "frame",
+              "bounds": [0.0606, 0.2865, 0.6419, 0.2378],
+              "children": [
+                { "id": "title_text", "type": "text", "bounds": [0.0606, 0.2865, 0.0937, 0.0595], "text": "Title" },
+                {
+                  "id": "description_text",
+                  "type": "text",
+                  "bounds": [0.0606, 0.3730, 0.5702, 0.1622],
+                  "text": "Description Text Description Text Description Text\nDescription Text Description Text Description Text\nDescription Text Description Text Description Text"
+                }
+              ]
+            },
+            {
+              "id": "thumbnail_frame",
+              "type": "frame",
+              "bounds": [0.8017, 0.2919, 0.1185, 0.2270],
+              "children": [
+                { "id": "thumbnail_icon", "type": "icon", "bounds": [0.8485, 0.3622, 0.0275, 0.0541] }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "progress_info_row",
+          "type": "frame",
+          "bounds": [0.0606, 0.5892, 0.8595, 0.0541],
+          "children": [
+            { "id": "progress_count_text", "type": "text", "bounds": [0.0606, 0.5892, 0.0413, 0.0432], "text": "N/N" },
+            { "id": "progress_percent_text", "type": "text", "bounds": [0.8347, 0.5892, 0.0854, 0.0432], "text": "{{NN}}%" }
+          ]
+        },
+        {
+          "id": "progress_bar_frame",
+          "type": "frame",
+          "bounds": [0.0606, 0.6595, 0.8595, 0.0270],
+          "children": [
+            { "id": "progress_track", "type": "shape", "bounds": [0.0606, 0.6595, 0.8595, 0.0216] },
+            { "id": "progress_fill", "type": "shape", "bounds": [0.0606, 0.6595, 0.4298, 0.0216] }
+          ]
+        },
+        {
+          "id": "button_row",
+          "type": "frame",
+          "bounds": [0.0606, 0.7676, 0.8595, 0.1243],
+          "children": [
+            {
+              "id": "left_button",
+              "type": "frame",
+              "bounds": [0.0606, 0.7676, 0.4187, 0.1243],
+              "children": [
+                { "id": "left_button_label", "type": "text", "bounds": [0.2342, 0.8054, 0.0716, 0.0486], "text": "Label" }
+              ]
+            },
+            {
+              "id": "right_button",
+              "type": "frame",
+              "bounds": [0.5014, 0.7676, 0.4187, 0.1243],
+              "children": [
+                { "id": "right_button_label", "type": "text", "bounds": [0.6749, 0.8054, 0.0716, 0.0486], "text": "Label" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
