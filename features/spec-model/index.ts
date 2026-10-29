@@ -13,6 +13,7 @@ export {
   addNode,
   area,
   contains,
+  containsPoint,
   deleteNode,
   findNode,
   moveNode,
