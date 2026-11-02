@@ -1,4 +1,4 @@
-import { flatten } from "./fields";
+import { addableFields, flatten } from "./fields";
 import type { Bounds, NodeKind, Point, SpecNode } from "./types";
 
 export function findNode(root: SpecNode, id: string): SpecNode | undefined {
@@ -127,6 +127,24 @@ export function setNodeValue(
   value: string
 ): SpecNode {
   return mapNode(root, id, (n) => ({ ...n, values: { ...n.values, [key]: value } }));
+}
+
+/** 기본 필드에 없는 분류를 노드에 추가한다. 이미 있거나 알 수 없는 분류면 그대로다. */
+export function addNodeField(root: SpecNode, id: string, key: string): SpecNode {
+  const node = findNode(root, id);
+  if (!node || !addableFields(node).some((f) => f.key === key)) return root;
+  return mapNode(root, id, (n) => ({ ...n, extraFields: [...(n.extraFields ?? []), key] }));
+}
+
+/** 추가했던 필드를 없애고 입력한 값도 지운다. 기본 필드는 없앨 수 없다. */
+export function removeNodeField(root: SpecNode, id: string, key: string): SpecNode {
+  const node = findNode(root, id);
+  if (!node || !node.extraFields?.includes(key)) return root;
+  return mapNode(root, id, (n) => {
+    const values = { ...n.values };
+    delete values[key];
+    return { ...n, extraFields: n.extraFields?.filter((k) => k !== key), values };
+  });
 }
 
 export function setNodeText(root: SpecNode, id: string, text: string): SpecNode {

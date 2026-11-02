@@ -2,7 +2,10 @@ export type { Bounds, NodeKind, Point, Selection, SpecNode } from "./types";
 export {
   FIELDS_BY_KIND,
   KIND_LABELS,
+  OPTIONAL_FIELDS,
   PROJECT_FIELDS,
+  addableFields,
+  fieldsOf,
   flatten,
   isFilled,
   nodeProgress,
@@ -11,6 +14,7 @@ export {
 export type { FieldDef, Progress } from "./fields";
 export {
   addNode,
+  addNodeField,
   area,
   contains,
   containsPoint,
@@ -18,6 +22,7 @@ export {
   findNode,
   moveNode,
   parentOf,
+  removeNodeField,
   resizeNode,
   setNodeText,
   setNodeValue,

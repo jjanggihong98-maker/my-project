@@ -10,6 +10,7 @@ import {
 } from "@/features/export";
 import {
   FIELDS_BY_KIND,
+  addNodeField,
   flatten,
   setNodeValue,
   type SpecNode,
@@ -61,6 +62,16 @@ describe("스펙 .md", () => {
 
     expect(md).toContain("`space-2`");
     expect(md).toContain("React + Tailwind");
+  });
+
+  test("노드에 추가한 필드의 값도 .md에 들어간다", () => {
+    const parsed = parseDraft(JSON.stringify(fixture));
+    if (!parsed.ok) throw new Error("fixture must parse");
+    let root = addNodeField(parsed.root, "header_row", "typography");
+    root = setNodeValue(root, "header_row", "typography", "body-md");
+    const md = buildSpecMarkdown({ root, project: {}, imageFileName });
+
+    expect(md.match(/^- 타이포 typography:.*/gm)).toEqual(["- 타이포 typography: `body-md`"]);
   });
 
   test("입력하지 않은 필드와 프로젝트 정보는 .md에 만들지 않는다", () => {

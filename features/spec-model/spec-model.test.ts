@@ -1,16 +1,20 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  addableFields,
   addNode,
+  addNodeField,
   deleteNode,
   enter,
   exit,
+  fieldsOf,
   findNode,
   locate,
   moveNode,
   nextSibling,
   pick,
   progress,
+  removeNodeField,
   setNodeValue,
   type SpecNode,
 } from "@/features/spec-model";
@@ -172,5 +176,49 @@ describe("영역 선택", () => {
       selectedId: "card",
       scopeId: "screen",
     });
+  });
+});
+
+describe("필드 추가", () => {
+  const keysOf = (root: SpecNode, id: string) => fieldsOf(findNode(root, id)!).map((f) => f.key);
+
+  test("기본 필드에 없는 분류를 골라 노드에 추가하면 입력 필드와 전체 필드 수가 늘어난다", () => {
+    const root = sample();
+    expect(addableFields(findNode(root, "body")!).map((f) => f.key)).toEqual(["typography"]);
+
+    const added = addNodeField(root, "body", "typography");
+
+    expect(keysOf(added, "body")).toEqual(["layout", "colors", "borders", "shadows", "typography"]);
+    expect(progress(added).total).toBe(progress(root).total + 1);
+    expect(addableFields(findNode(added, "body")!)).toEqual([]);
+  });
+
+  test("이미 있는 필드를 다시 추가해도 늘어나지 않는다", () => {
+    const once = addNodeField(sample(), "body", "typography");
+
+    expect(keysOf(addNodeField(once, "body", "typography"), "body")).toHaveLength(5);
+    expect(keysOf(addNodeField(sample(), "body", "colors"), "body")).toHaveLength(4);
+  });
+
+  test("알 수 없는 분류는 추가하지 않는다", () => {
+    expect(keysOf(addNodeField(sample(), "body", "nope"), "body")).toHaveLength(4);
+  });
+
+  test("추가한 필드를 없애면 입력한 값도 함께 지워진다", () => {
+    let root = addNodeField(sample(), "body", "typography");
+    root = setNodeValue(root, "body", "typography", "body-md");
+    expect(progress(root).filled).toBe(1);
+
+    root = removeNodeField(root, "body", "typography");
+
+    expect(keysOf(root, "body")).toHaveLength(4);
+    expect(findNode(root, "body")!.values.typography).toBeUndefined();
+    expect(progress(root).filled).toBe(0);
+  });
+
+  test("기본 필드는 없앨 수 없다", () => {
+    const root = setNodeValue(sample(), "body", "colors", "bg-1");
+
+    expect(removeNodeField(root, "body", "colors")).toBe(root);
   });
 });

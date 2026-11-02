@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import fixture from "@/docs/specs/ui-spec-builder-mvp/fixtures/notification-card.json";
 import { parseDraft } from "@/features/draft";
-import { findNode, progress } from "@/features/spec-model";
+import { findNode, flatten, progress } from "@/features/spec-model";
 import {
   canExport,
   initialWorkspace,
@@ -77,5 +77,28 @@ describe("내보내기 가능 여부", () => {
     expect(canExport(withoutDraft)).toBe(false);
     expect(canExport(withDraft)).toBe(true);
     expect(progress(withDraft.root!).filled).toBe(0);
+  });
+});
+
+describe("필드 추가", () => {
+  test("노드에 필드를 추가하고 값을 입력한 뒤 없애면 값도 함께 사라진다", () => {
+    const withField = run(
+      { type: "imageLoaded", image },
+      accepted(),
+      { type: "addField", id: "header_row", key: "typography" },
+      { type: "setValue", id: "header_row", key: "typography", value: "body-md" }
+    );
+    expect(findNode(withField.root!, "header_row")!.values.typography).toBe("body-md");
+    expect(progress(withField.root!).total).toBe(
+      progress(run({ type: "imageLoaded", image }, accepted()).root!).total + 1
+    );
+
+    const removed = workspaceReducer(withField, {
+      type: "removeField",
+      id: "header_row",
+      key: "typography",
+    });
+    expect(findNode(removed.root!, "header_row")!.values.typography).toBeUndefined();
+    expect(flatten(removed.root!)).toHaveLength(flatten(withField.root!).length);
   });
 });
