@@ -35,6 +35,24 @@ export const FIELDS_BY_KIND: Record<NodeKind, FieldDef[]> = {
   ],
 };
 
+/** 노드에 필요하면 추가할 수 있는 분류. 추가한 필드의 입력 양식은 기본 필드와 같다. */
+export const OPTIONAL_FIELDS: FieldDef[] = [LAYOUT, COLORS, BORDERS, SHADOWS, TYPOGRAPHY];
+
+/** 노드에 지금 보이는 필드: 종류별 기본 필드와 사용자가 추가한 필드 */
+export function fieldsOf(node: SpecNode): FieldDef[] {
+  const defaults = FIELDS_BY_KIND[node.kind];
+  const extras = (node.extraFields ?? [])
+    .map((key) => OPTIONAL_FIELDS.find((f) => f.key === key))
+    .filter((f): f is FieldDef => f !== undefined && !defaults.some((d) => d.key === f.key));
+  return [...defaults, ...extras];
+}
+
+/** 아직 노드에 없어서 추가할 수 있는 분류 */
+export function addableFields(node: SpecNode): FieldDef[] {
+  const shown = new Set(fieldsOf(node).map((f) => f.key));
+  return OPTIONAL_FIELDS.filter((f) => !shown.has(f.key));
+}
+
 export const PROJECT_FIELDS: FieldDef[] = [
   { key: "stack", label: "대상 스택", placeholder: "예: React + Tailwind" },
 ];
@@ -72,7 +90,7 @@ export function progress(root: SpecNode): Progress {
 }
 
 export function nodeProgress(node: SpecNode): Progress {
-  const fields = FIELDS_BY_KIND[node.kind];
+  const fields = fieldsOf(node);
   return {
     filled: fields.filter((f) => isFilled(node.values[f.key])).length,
     total: fields.length,

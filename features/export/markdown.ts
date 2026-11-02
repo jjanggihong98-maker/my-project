@@ -1,7 +1,7 @@
 import {
-  FIELDS_BY_KIND,
   KIND_LABELS,
   PROJECT_FIELDS,
+  fieldsOf,
   flatten,
   isFilled,
   parentOf,
@@ -40,7 +40,7 @@ function nodeSection(
   if (node.kind === "text") {
     lines.push(`- 문구: ${JSON.stringify(node.text ?? "")}`);
   }
-  const entered = FIELDS_BY_KIND[node.kind].filter((f) => isFilled(node.values[f.key]));
+  const entered = fieldsOf(node).filter((f) => isFilled(node.values[f.key]));
   for (const field of entered) {
     lines.push(`- ${field.label}: \`${node.values[field.key].trim()}\``);
   }

@@ -1,9 +1,11 @@
 import {
   addNode,
+  addNodeField,
   deleteNode,
   findNode,
   moveNode,
   parentOf,
+  removeNodeField,
   resizeNode,
   setNodeText,
   setNodeValue,
@@ -35,6 +37,8 @@ export type WorkspaceAction =
   | { type: "select"; selection: Selection }
   | { type: "setValue"; id: string; key: string; value: string }
   | { type: "setText"; id: string; text: string }
+  | { type: "addField"; id: string; key: string }
+  | { type: "removeField"; id: string; key: string }
   | { type: "setProject"; key: string; value: string }
   | { type: "addBox"; kind: NodeKind; bounds: Bounds }
   | { type: "moveBox"; id: string; dx: number; dy: number }
@@ -69,6 +73,10 @@ export function workspaceReducer(
       return { ...state, selection: action.selection };
     case "setValue":
       return { ...state, root: setNodeValue(root, action.id, action.key, action.value) };
+    case "addField":
+      return { ...state, root: addNodeField(root, action.id, action.key) };
+    case "removeField":
+      return { ...state, root: removeNodeField(root, action.id, action.key) };
     case "setText":
       return { ...state, root: setNodeText(root, action.id, action.text) };
     case "setProject":

@@ -11,6 +11,8 @@ export interface SpecNode {
   bounds: Bounds;
   /** Text 노드의 문구 */
   text?: string;
+  /** 노드 종류의 기본 필드 외에 사용자가 추가한 필드 key */
+  extraFields?: string[];
   /** 필드 key별로 사용자가 입력한 토큰 이름 */
   values: Record<string, string>;
   children: SpecNode[];
